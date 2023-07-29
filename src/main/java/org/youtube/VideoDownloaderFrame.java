@@ -108,4 +108,5 @@ public class VideoDownloaderFrame extends JFrame {
             infoLabel.setText("Error: " + ex.getMessage());
         }
     }
+
 }
