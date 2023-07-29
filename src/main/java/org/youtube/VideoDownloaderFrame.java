@@ -49,10 +49,16 @@ public class VideoDownloaderFrame extends JFrame {
     private void downloadVideo() {
         String url = urlField.getText();
 
+        System.out.printf("url: " + url);
+
         if (!isValidURL(url)) {
-            infoLabel.setText("Invalid URL. Please check and try again.");
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(VideoDownloaderFrame.this, "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            });
             return;
         }
+
+
 
         String outputPath = "C:/Users/Administrator/Desktop/"; // Путь для сохранения видео
 
@@ -68,27 +74,27 @@ public class VideoDownloaderFrame extends JFrame {
         try {
             Process process = processBuilder.start();
 
-            // Читаем поток вывода
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder output = new StringBuilder();
-            String line;
+            // Читаем поток вывода используя try-with-resources
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                StringBuilder output = new StringBuilder();
+                String line;
 
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
-            }
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
+                }
 
-            process.waitFor();
+                process.waitFor();
 
-            // Если в выводе есть сообщение об ошибке, отображаем его
-            if (output.toString().contains("ERROR")) {
-                infoLabel.setText("Error: Check output");
-                System.out.println(output);  // Выводим всю информацию в консоль
-            } else {
-                infoLabel.setText("Download complete");
+                // Если в выводе есть сообщение об ошибке, отображаем его
+                if (output.toString().contains("ERROR")) {
+                    infoLabel.setText("Error: Check output");
+                    System.out.println(output);  // Выводим всю информацию в консоль
+                } else {
+                    infoLabel.setText("Download complete");
+                }
             }
         } catch (Exception ex) {
             infoLabel.setText("Error: " + ex.getMessage());
         }
     }
-
 }
