@@ -13,6 +13,8 @@ public class VideoDownloaderFrame extends JFrame {
 
     private final JTextField urlField;
     private final JButton downloadButton;
+
+    private final JButton clearButton; // Добавляем кнопку очистки
     private final JLabel infoLabel;
 
     public VideoDownloaderFrame() {
@@ -25,13 +27,22 @@ public class VideoDownloaderFrame extends JFrame {
         panel.setLayout(new BorderLayout());
 
         urlField = new JTextField();
-        downloadButton = new JButton("Download");
-        infoLabel = new JLabel("Enter the video URL");
 
+        downloadButton = new JButton("Download");
         downloadButton.addActionListener(e -> downloadVideo());
 
+        clearButton = new JButton("Clear"); // Создаем кнопку
+        clearButton.addActionListener(e -> urlField.setText("")); // Устанавливаем действие для очистки поля
+
+        infoLabel = new JLabel("Enter the video URL");
+
+        JPanel eastPanel = new JPanel(); // Создаем новую панель для кнопок
+        eastPanel.setLayout(new GridLayout(2, 1)); // Располагаем кнопки друг над другом
+        eastPanel.add(downloadButton);
+        eastPanel.add(clearButton);
+
         panel.add(urlField, BorderLayout.CENTER);
-        panel.add(downloadButton, BorderLayout.EAST);
+        panel.add(eastPanel, BorderLayout.EAST); // Добавляем панель вместо прямого добавления кнопки
         panel.add(infoLabel, BorderLayout.SOUTH);
 
         add(panel);
@@ -57,8 +68,6 @@ public class VideoDownloaderFrame extends JFrame {
             });
             return;
         }
-
-
 
         String outputPath = "C:/Users/Administrator/Desktop/"; // Путь для сохранения видео
 
