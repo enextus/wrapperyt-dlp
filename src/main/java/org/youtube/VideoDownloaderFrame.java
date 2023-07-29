@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,23 @@ public class VideoDownloaderFrame extends JFrame {
         add(panel);
     }
 
+    public static boolean isValidURL(String url) {
+        try {
+            new URI(url).parseServerAuthority();
+            return true;
+        } catch (URISyntaxException e) {
+            return false;
+        }
+    }
+
     private void downloadVideo() {
         String url = urlField.getText();
+
+        if (!isValidURL(url)) {
+            infoLabel.setText("Invalid URL. Please check and try again.");
+            return;
+        }
+
         String outputPath = "C:/Users/Administrator/Desktop/"; // Путь для сохранения видео
 
         List<String> command = new ArrayList<>();
@@ -55,9 +72,11 @@ public class VideoDownloaderFrame extends JFrame {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder output = new StringBuilder();
             String line;
+
             while ((line = reader.readLine()) != null) {
                 output.append(line).append("\n");
             }
+
             process.waitFor();
 
             // Если в выводе есть сообщение об ошибке, отображаем его
