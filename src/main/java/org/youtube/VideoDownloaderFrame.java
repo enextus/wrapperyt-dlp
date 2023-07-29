@@ -11,7 +11,7 @@ import java.util.List;
 
 public class VideoDownloaderFrame extends JFrame {
 
-    public static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
+    private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
     private final JTextField urlField;
     private final JButton downloadButton;
 
@@ -60,8 +60,18 @@ public class VideoDownloaderFrame extends JFrame {
 
     private void downloadVideo() {
         String url = urlField.getText();
+        System.out.println("url: " + url); // Используйте println вместо printf
 
-        System.out.printf("url: " + url);
+        // Проверка на пустой ввод
+        if (url.isEmpty()) {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
+                        "Please enter a URL.", "Error", JOptionPane.ERROR_MESSAGE);
+            });
+            return;
+        }
+
+        System.out.println("url: " + url);
 
         if (!isValidURL(url)) {
             SwingUtilities.invokeLater(() -> {
@@ -71,35 +81,27 @@ public class VideoDownloaderFrame extends JFrame {
             return;
         }
 
-        String outputPath = OUTPUT_PATH; // Путь для сохранения видео
-
         List<String> command = new ArrayList<>();
         command.add("yt-dlp");
         command.add(url);
         command.add("-o");
-        command.add(outputPath + "%(title)s.%(ext)s");
+        command.add(OUTPUT_PATH + "%(title)s.%(ext)s"); // Используйте OUTPUT_PATH напрямую
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
-        processBuilder.redirectErrorStream(true);  // Объединяем стандартный поток вывода и поток ошибок
+        processBuilder.redirectErrorStream(true);
 
         try {
             Process process = processBuilder.start();
-
-            // Читаем поток вывода используя try-with-resources
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 StringBuilder output = new StringBuilder();
                 String line;
-
                 while ((line = reader.readLine()) != null) {
                     output.append(line).append("\n");
                 }
-
                 process.waitFor();
-
-                // Если в выводе есть сообщение об ошибке, отображаем его
                 if (output.toString().contains("ERROR")) {
                     infoLabel.setText("Error: Check output");
-                    System.out.println(output);  // Выводим всю информацию в консоль
+                    System.out.println(output);
                 } else {
                     infoLabel.setText("Download complete");
                 }
