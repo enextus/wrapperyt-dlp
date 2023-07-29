@@ -11,6 +11,7 @@ import java.util.List;
 
 public class VideoDownloaderFrame extends JFrame {
 
+    public static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
     private final JTextField urlField;
     private final JButton downloadButton;
 
@@ -64,12 +65,13 @@ public class VideoDownloaderFrame extends JFrame {
 
         if (!isValidURL(url)) {
             SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(VideoDownloaderFrame.this, "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
+                        "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE);
             });
             return;
         }
 
-        String outputPath = "C:/Users/Administrator/Desktop/"; // Путь для сохранения видео
+        String outputPath = OUTPUT_PATH; // Путь для сохранения видео
 
         List<String> command = new ArrayList<>();
         command.add("yt-dlp");
