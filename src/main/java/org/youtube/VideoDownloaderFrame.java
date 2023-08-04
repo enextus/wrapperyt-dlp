@@ -13,12 +13,11 @@ public class VideoDownloaderFrame extends JFrame {
 
     private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
     private final JTextField urlField;
-    private final JButton downloadButton;
-
-    private final JButton clearButton; // Добавляем кнопку очистки
     private final JLabel infoLabel;
 
     public VideoDownloaderFrame() {
+        JButton downloadButton;
+        JButton clearButton;
         setTitle("Video Downloader");
         setSize(500, 120);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
