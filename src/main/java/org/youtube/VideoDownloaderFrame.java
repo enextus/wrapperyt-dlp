@@ -95,10 +95,8 @@ public class VideoDownloaderFrame extends JFrame {
         System.out.println("url: " + url);
 
         if (!isValidURL(url)) {
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
-                        "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE);
-            });
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
+                    "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE));
             return;
         }
 
