@@ -88,10 +88,8 @@ public class VideoDownloaderFrame extends JFrame {
 
         // Проверка на пустой ввод
         if (url.isEmpty()) {
-            SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
-                        "Please enter a URL.", "Error", JOptionPane.ERROR_MESSAGE);
-            });
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
+                    "Please enter a URL.", "Error", JOptionPane.ERROR_MESSAGE));
             return;
         }
 
