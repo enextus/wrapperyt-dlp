@@ -2,7 +2,11 @@ package org.youtube;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,8 +32,9 @@ public class VideoDownloaderFrame extends JFrame {
 
         urlField = new JTextField();
 
-        // Добавление контекстного меню для поля ввода
-        JPopupMenu popupMenu = new JPopupMenu();
+        JPopupMenu popupMenu = createPopupMenuForUrlField();
+        urlField.setComponentPopupMenu(popupMenu);
+
         JMenuItem copy = new JMenuItem("Копировать");
         JMenuItem paste = new JMenuItem("Вставить");
         JMenuItem cut = new JMenuItem("Вырезать");
@@ -72,14 +77,39 @@ public class VideoDownloaderFrame extends JFrame {
         });
     }
 
+    private JPopupMenu createPopupMenuForUrlField() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem pasteMenuItem = new JMenuItem("Paste");
+        pasteMenuItem.addActionListener(e -> {
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            DataFlavor flavor = DataFlavor.stringFlavor;
+            if (clipboard.isDataFlavorAvailable(flavor)) {
+                try {
+                    String clipboardText = (String) clipboard.getData(flavor);
+                    urlField.setText(clipboardText);
+                } catch (UnsupportedFlavorException | IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        popupMenu.add(pasteMenuItem);
+
+        // ... add more items if necessary
+
+        return popupMenu;
+    }
+
     public static boolean isValidURL(String url) {
         try {
+            // The result is intentionally ignored; the method will throw an exception if it's an invalid URI.
             new URI(url).parseServerAuthority();
             return true;
         } catch (URISyntaxException e) {
             return false;
         }
     }
+
 
     private void downloadVideo() {
         String url = urlField.getText();
