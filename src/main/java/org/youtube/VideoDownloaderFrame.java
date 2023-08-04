@@ -22,31 +22,55 @@ public class VideoDownloaderFrame extends JFrame {
         setTitle("Video Downloader");
         setSize(500, 120);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Центрируем окно
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
         urlField = new JTextField();
 
+        // Добавление контекстного меню для поля ввода
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem copy = new JMenuItem("Копировать");
+        JMenuItem paste = new JMenuItem("Вставить");
+        JMenuItem cut = new JMenuItem("Вырезать");
+
+        copy.addActionListener(e -> urlField.copy());
+        paste.addActionListener(e -> urlField.paste());
+        cut.addActionListener(e -> urlField.cut());
+
+        popupMenu.add(copy);
+        popupMenu.add(paste);
+        popupMenu.add(cut);
+
+        urlField.setComponentPopupMenu(popupMenu);
+
         downloadButton = new JButton("Download");
         downloadButton.addActionListener(e -> downloadVideo());
 
-        clearButton = new JButton("Clear"); // Создаем кнопку
-        clearButton.addActionListener(e -> urlField.setText("")); // Устанавливаем действие для очистки поля
+        clearButton = new JButton("Clear");
+        clearButton.addActionListener(e -> urlField.setText(""));
 
         infoLabel = new JLabel("Enter the video URL");
 
-        JPanel eastPanel = new JPanel(); // Создаем новую панель для кнопок
-        eastPanel.setLayout(new GridLayout(2, 1)); // Располагаем кнопки друг над другом
+        JPanel eastPanel = new JPanel();
+        eastPanel.setLayout(new GridLayout(2, 1));
         eastPanel.add(downloadButton);
         eastPanel.add(clearButton);
 
         panel.add(urlField, BorderLayout.CENTER);
-        panel.add(eastPanel, BorderLayout.EAST); // Добавляем панель вместо прямого добавления кнопки
+        panel.add(eastPanel, BorderLayout.EAST);
         panel.add(infoLabel, BorderLayout.SOUTH);
 
         add(panel);
+
+        // Установка фокуса на поле ввода после отображения
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                urlField.requestFocusInWindow();
+            }
+        });
     }
 
     public static boolean isValidURL(String url) {
