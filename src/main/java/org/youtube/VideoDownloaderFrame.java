@@ -27,6 +27,9 @@ public class VideoDownloaderFrame extends JFrame {
     private final JTextField urlField;
     private final JLabel infoLabel;
 
+    /**
+     * Constructor initializes the frame and components within it.
+     */
     public VideoDownloaderFrame() {
         JButton downloadButton;
         JButton clearButton;
@@ -40,7 +43,7 @@ public class VideoDownloaderFrame extends JFrame {
 
         urlField = new JTextField();
 
-        createAndSetPopupMenu(); // Вызовите новый метод здесь
+        createAndSetPopupMenu();
 
         downloadButton = new JButton("Download");
         downloadButton.addActionListener(e -> downloadVideo());
@@ -61,7 +64,7 @@ public class VideoDownloaderFrame extends JFrame {
 
         add(panel);
 
-        // Установка фокуса на поле ввода после отображения
+        // Set focus on the input field after display
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -70,6 +73,11 @@ public class VideoDownloaderFrame extends JFrame {
         });
     }
 
+    /**
+     * Creates a popup menu specifically for the URL field.
+     *
+     * @return the popup menu with the "Paste" option
+     */
     private JPopupMenu createPopupMenuForUrlField() {
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -93,6 +101,12 @@ public class VideoDownloaderFrame extends JFrame {
         return popupMenu;
     }
 
+    /**
+     * Checks if a given URL is valid.
+     *
+     * @param url the URL to be checked
+     * @return true if the URL is valid, false otherwise
+     */
     public static boolean isValidURL(String url) {
         try {
             // The result is intentionally ignored; the method will throw an exception if it's an invalid URI.
@@ -103,6 +117,9 @@ public class VideoDownloaderFrame extends JFrame {
         }
     }
 
+    /**
+     * Creates and sets the popup menu for the URL field.
+     */
     private void createAndSetPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -121,6 +138,10 @@ public class VideoDownloaderFrame extends JFrame {
         urlField.setComponentPopupMenu(popupMenu);
     }
 
+    /**
+     * Downloads the video from the given URL.
+     * Handles all the logic and error cases for downloading a video.
+     */
     private void downloadVideo() {
 
         Path outputPath = Paths.get(OUTPUT_PATH);
@@ -129,14 +150,13 @@ public class VideoDownloaderFrame extends JFrame {
                 Files.createDirectories(outputPath);
             } catch (IOException e) {
                 infoLabel.setText("Error creating directory: " + e.getMessage());
-                return; // Прекратите выполнение, если директория не может быть создана
+                return; // Terminate execution if the directory cannot be created
             }
         }
 
         String url = urlField.getText();
-        System.out.println("url: " + url); // Используйте println вместо printf
-
-        // Проверка на пустой ввод
+        System.out.println("url: " + url);
+        // Check for empty input
         if (url.isEmpty()) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
                     "Please enter a URL.", "Error", JOptionPane.ERROR_MESSAGE));
@@ -155,7 +175,7 @@ public class VideoDownloaderFrame extends JFrame {
         command.add("yt-dlp");
         command.add(url);
         command.add("-o");
-        command.add(OUTPUT_PATH + "%(title)s.%(ext)s"); // Используйте OUTPUT_PATH напрямую
+        command.add(OUTPUT_PATH + "%(title)s.%(ext)s");
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
@@ -178,13 +198,13 @@ public class VideoDownloaderFrame extends JFrame {
             }
         } catch (IOException ex) {
             infoLabel.setText("I/O Error: " + ex.getMessage());
-            // Дополнительная обработка или логирование IOException
+            // Additional handling or logging of IOException
         } catch (InterruptedException ex) {
             infoLabel.setText("Interrupted: " + ex.getMessage());
-            // Дополнительная обработка или логирование InterruptedException
+            // Additional handling or logging of InterruptedException
         } catch (Exception ex) {
             infoLabel.setText("General Error: " + ex.getMessage());
-            // Дополнительная обработка или логирование общего исключения
+            // Additional handling or logging of the general exception
         }
 
     }
