@@ -61,7 +61,7 @@ public class VideoDownloaderFrame extends JFrame {
             }
         });
     }
-    
+
     private JPopupMenu createPopupMenuForUrlField() {
         JPopupMenu popupMenu = new JPopupMenu();
 
@@ -157,9 +157,17 @@ public class VideoDownloaderFrame extends JFrame {
                     infoLabel.setText("Download complete");
                 }
             }
+        } catch (IOException ex) {
+            infoLabel.setText("I/O Error: " + ex.getMessage());
+            // Дополнительная обработка или логирование IOException
+        } catch (InterruptedException ex) {
+            infoLabel.setText("Interrupted: " + ex.getMessage());
+            // Дополнительная обработка или логирование InterruptedException
         } catch (Exception ex) {
-            infoLabel.setText("Error: " + ex.getMessage());
+            infoLabel.setText("General Error: " + ex.getMessage());
+            // Дополнительная обработка или логирование общего исключения
         }
+
     }
 
 }
