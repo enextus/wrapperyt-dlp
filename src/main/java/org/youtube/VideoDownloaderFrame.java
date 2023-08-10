@@ -10,9 +10,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
+ * It provides a simple interface for entering a video URL, and buttons to download the video
+ * and clear the entered URL.
+ */
 public class VideoDownloaderFrame extends JFrame {
 
     private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
@@ -114,6 +122,17 @@ public class VideoDownloaderFrame extends JFrame {
     }
 
     private void downloadVideo() {
+
+        Path outputPath = Paths.get(OUTPUT_PATH);
+        if (!Files.exists(outputPath)) {
+            try {
+                Files.createDirectories(outputPath);
+            } catch (IOException e) {
+                infoLabel.setText("Error creating directory: " + e.getMessage());
+                return; // Прекратите выполнение, если директория не может быть создана
+            }
+        }
+
         String url = urlField.getText();
         System.out.println("url: " + url); // Используйте println вместо printf
 
