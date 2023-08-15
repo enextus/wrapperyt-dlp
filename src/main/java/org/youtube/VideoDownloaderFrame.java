@@ -19,9 +19,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.net.URL;
-import java.net.MalformedURLException;
-
 /**
  * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
  * It provides a simple interface for entering a video URL, and buttons to download the video
@@ -44,6 +41,16 @@ public class VideoDownloaderFrame extends JFrame {
     public static final String COPY = "Copy";
     public static final String PASTE = "Paste";
     public static final String CUT = "Cut";
+    public static final String URL1 = "url: ";
+    public static final String YT_DLP = "yt-dlp";
+    public static final String O = "-o";
+    public static final String TITLE_S_EXT_S = "%(title)s.%(ext)s";
+    public static final String ENTER_THE_VIDEO_URL = "Enter the video URL";
+    public static final String CLEAR = "Clear";
+    public static final String DOWNLOAD = "Download";
+    public static final int WIDTH1 = 500;
+    public static final int HEIGHT1 = 120;
+    public static final String VIDEO_DOWNLOADER = "Video Downloader";
     private final JTextField urlField;
     private final JLabel infoLabel;
 
@@ -53,8 +60,8 @@ public class VideoDownloaderFrame extends JFrame {
     public VideoDownloaderFrame() {
         JButton downloadButton;
         JButton clearButton;
-        setTitle("Video Downloader");
-        setSize(500, 120);
+        setTitle(VIDEO_DOWNLOADER);
+        setSize(WIDTH1, HEIGHT1);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -65,13 +72,13 @@ public class VideoDownloaderFrame extends JFrame {
 
         createAndSetPopupMenu();
 
-        downloadButton = new JButton("Download");
+        downloadButton = new JButton(DOWNLOAD);
         downloadButton.addActionListener(e -> downloadVideo());
 
-        clearButton = new JButton("Clear");
+        clearButton = new JButton(CLEAR);
         clearButton.addActionListener(e -> urlField.setText(""));
 
-        infoLabel = new JLabel("Enter the video URL");
+        infoLabel = new JLabel(ENTER_THE_VIDEO_URL);
 
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new GridLayout(2, 1));
@@ -116,9 +123,7 @@ public class VideoDownloaderFrame extends JFrame {
         });
 
         popupMenu.add(pasteMenuItem);
-
         // ... add more items if necessary
-
         return popupMenu;
     }
 
@@ -167,7 +172,6 @@ public class VideoDownloaderFrame extends JFrame {
      * Handles all the logic and error cases for downloading a video.
      */
     private void downloadVideo() {
-
         Path outputPath = Paths.get(OUTPUT_PATH);
         if (!Files.exists(outputPath)) {
             try {
@@ -180,6 +184,7 @@ public class VideoDownloaderFrame extends JFrame {
 
         String url = urlField.getText();
         System.out.println(URL + url);
+
         // Check for empty input
         if (url.isEmpty()) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
@@ -187,7 +192,7 @@ public class VideoDownloaderFrame extends JFrame {
             return;
         }
 
-        System.out.println("url: " + url);
+        System.out.println(URL1 + url);
 
         if (!isValidURL(url)) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
@@ -196,10 +201,10 @@ public class VideoDownloaderFrame extends JFrame {
         }
 
         List<String> command = new ArrayList<>();
-        command.add("yt-dlp");
+        command.add(YT_DLP);
         command.add(url);
-        command.add("-o");
-        command.add(OUTPUT_PATH + "%(title)s.%(ext)s");
+        command.add(O);
+        command.add(OUTPUT_PATH + TITLE_S_EXT_S);
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
