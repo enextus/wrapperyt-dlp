@@ -5,19 +5,20 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import java.net.URL;
+import java.net.MalformedURLException;
 
 /**
  * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
@@ -25,7 +26,6 @@ import java.net.URL;
  * and clear the entered URL.
  */
 public class VideoDownloaderFrame extends JFrame {
-
     private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
     private final JTextField urlField;
     private final JLabel infoLabel;
@@ -97,6 +97,7 @@ public class VideoDownloaderFrame extends JFrame {
                 }
             }
         });
+
         popupMenu.add(pasteMenuItem);
 
         // ... add more items if necessary
@@ -112,26 +113,17 @@ public class VideoDownloaderFrame extends JFrame {
      */
     public static boolean isValidURL(String url) {
         try {
-            URL u = new URL(url); // Проверяет синтаксис URL
+            URL u = new URL(url);
 
-            // Проверка схемы
-            if (!("http".equals(u.getProtocol()) || "https".equals(u.getProtocol()))) {
-                return false;
-            }
+            if (!("http".equals(u.getProtocol()) || "https".equals(u.getProtocol()))) return false;
+            if (u.getHost() == null || u.getHost().isEmpty()) return false;
 
-            // Проверка хоста
-            if (u.getHost() == null || u.getHost().isEmpty()) {
-                return false;
-            }
-
-            // Если требуется, можно добавить дополнительные проверки (например, специфические пути)
-
+            // If needed, additional checks can be added (e.g., specific paths)
             return true;
         } catch (MalformedURLException e) {
             return false;
         }
     }
-
 
     /**
      * Creates and sets the popup menu for the URL field.
