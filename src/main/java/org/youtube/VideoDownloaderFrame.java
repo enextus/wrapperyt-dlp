@@ -110,16 +110,6 @@ public class VideoDownloaderFrame extends JFrame {
      * @param url the URL to be checked
      * @return true if the URL is valid, false otherwise
      */
-/*    public static boolean isValidURL(String url) {
-        try {
-            // The result is intentionally ignored; the method will throw an exception if it's an invalid URI.
-            new URI(url).parseServerAuthority();
-            return true;
-        } catch (URISyntaxException e) {
-            return false;
-        }
-    }
-    */
     public static boolean isValidURL(String url) {
         try {
             URL u = new URL(url); // Проверяет синтаксис URL
