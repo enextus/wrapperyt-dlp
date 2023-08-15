@@ -8,6 +8,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -15,6 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.net.URL;
 
 /**
  * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
@@ -107,7 +110,7 @@ public class VideoDownloaderFrame extends JFrame {
      * @param url the URL to be checked
      * @return true if the URL is valid, false otherwise
      */
-    public static boolean isValidURL(String url) {
+/*    public static boolean isValidURL(String url) {
         try {
             // The result is intentionally ignored; the method will throw an exception if it's an invalid URI.
             new URI(url).parseServerAuthority();
@@ -116,6 +119,29 @@ public class VideoDownloaderFrame extends JFrame {
             return false;
         }
     }
+    */
+    public static boolean isValidURL(String url) {
+        try {
+            URL u = new URL(url); // Проверяет синтаксис URL
+
+            // Проверка схемы
+            if (!("http".equals(u.getProtocol()) || "https".equals(u.getProtocol()))) {
+                return false;
+            }
+
+            // Проверка хоста
+            if (u.getHost() == null || u.getHost().isEmpty()) {
+                return false;
+            }
+
+            // Если требуется, можно добавить дополнительные проверки (например, специфические пути)
+
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
+
 
     /**
      * Creates and sets the popup menu for the URL field.

@@ -13,4 +13,10 @@ public class VideoDownloaderFrameTest {
         assertTrue(VideoDownloaderFrame.isValidURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
     }
 
+    @Test
+    public void testInvalidUrl() {
+        assertFalse(VideoDownloaderFrame.isValidURL("htt://www.google.com")); // отсутствует "p" в "http"
+        assertFalse(VideoDownloaderFrame.isValidURL("randomtext"));
+    }
+
 }
