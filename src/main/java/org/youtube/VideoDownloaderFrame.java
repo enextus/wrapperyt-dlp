@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -112,15 +114,14 @@ public class VideoDownloaderFrame extends JFrame {
      * @return true if the URL is valid, false otherwise
      */
     public static boolean isValidURL(String url) {
+        if (url == null) return false;
+
         try {
-            URL u = new URL(url);
-
-            if (!("http".equals(u.getProtocol()) || "https".equals(u.getProtocol()))) return false;
-            if (u.getHost() == null || u.getHost().isEmpty()) return false;
-
-            // If needed, additional checks can be added (e.g., specific paths)
-            return true;
-        } catch (MalformedURLException e) {
+            URI uri = new URI(url);
+            uri.parseServerAuthority();
+            String scheme = uri.getScheme();
+            return "http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme);
+        } catch (URISyntaxException e) {
             return false;
         }
     }

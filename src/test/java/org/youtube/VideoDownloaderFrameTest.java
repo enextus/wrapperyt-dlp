@@ -19,4 +19,22 @@ public class VideoDownloaderFrameTest {
         assertFalse(VideoDownloaderFrame.isValidURL("randomtext"));
     }
 
+    @Test
+    public void testDifferentProtocols() {
+        assertFalse(VideoDownloaderFrame.isValidURL("ftp://www.example.com")); // FTP is not a supported protocol
+    }
+
+
+    @Test
+    public void testDifferentProtocols_others() {
+        assertTrue(VideoDownloaderFrame.isValidURL("http://www.example.com"));
+        assertFalse(VideoDownloaderFrame.isValidURL("xyz://www.example.com")); // if you expect this to fail
+    }
+
+    @Test
+    public void testEmptyOrNullUrl() {
+        assertFalse(VideoDownloaderFrame.isValidURL(null));
+        assertFalse(VideoDownloaderFrame.isValidURL(""));
+    }
+
 }
