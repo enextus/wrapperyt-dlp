@@ -37,4 +37,32 @@ public class VideoDownloaderFrameTest {
         assertFalse(VideoDownloaderFrame.isValidURL(""));
     }
 
+    @Test
+    public void testUrlWithFragmentsAndQueryParameters() {
+        assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com/page?param=value#section"));
+    }
+
+    @Test
+    public void testUrlWithPort() {
+        assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com:8080/page"));
+        assertFalse(VideoDownloaderFrame.isValidURL("http://www.example.com:-1/page")); // недопустимый номер порта
+    }
+
+    @Test
+    public void testUrlWithEscapedCharacters() {
+        assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com/page%20with%20spaces"));
+    }
+
+    @Test
+    public void testUrlWithPathCharacters() {
+        assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com/valid_path"));
+        assertFalse(VideoDownloaderFrame.isValidURL("https://www.example.com/invalid|path")); // недопустимый символ в пути
+    }
+
+    @Test
+    public void testVeryLongUrl() {
+        String longUrl = "https://www.example.com/" + "a".repeat(8000);
+        assertTrue(VideoDownloaderFrame.isValidURL(longUrl)); // Если вы ожидаете, что это допустимый URL
+    }
+
 }
