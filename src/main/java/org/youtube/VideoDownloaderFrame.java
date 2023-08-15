@@ -29,6 +29,21 @@ import java.net.MalformedURLException;
  */
 public class VideoDownloaderFrame extends JFrame {
     private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
+    public static final String ERROR_CHECK_OUTPUT = "Error: Check output";
+    public static final String DOWNLOAD_COMPLETE = "Download complete";
+    public static final String I_O_ERROR = "I/O Error: ";
+    public static final String INTERRUPTED = "Interrupted: ";
+    public static final String GENERAL_ERROR = "General Error: ";
+    public static final String ERROR1 = "ERROR";
+    public static final String INVALID_URL_PLEASE_CHECK_AND_TRY_AGAIN = "Invalid URL. Please check and try again.";
+    public static final String PLEASE_ENTER_A_URL = "Please enter a URL.";
+    public static final String ERROR2 = "Error";
+    public static final String URL = "url: ";
+    public static final String ERROR3 = "Error";
+    public static final String ERROR_CREATING_DIRECTORY = "Error creating directory: ";
+    public static final String COPY = "Copy";
+    public static final String PASTE = "Paste";
+    public static final String CUT = "Cut";
     private final JTextField urlField;
     private final JLabel infoLabel;
 
@@ -132,9 +147,9 @@ public class VideoDownloaderFrame extends JFrame {
     private void createAndSetPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
 
-        JMenuItem copy = new JMenuItem("Копировать");
-        JMenuItem paste = new JMenuItem("Вставить");
-        JMenuItem cut = new JMenuItem("Вырезать");
+        JMenuItem copy = new JMenuItem(COPY);
+        JMenuItem paste = new JMenuItem(PASTE);
+        JMenuItem cut = new JMenuItem(CUT);
 
         copy.addActionListener(e -> urlField.copy());
         paste.addActionListener(e -> urlField.paste());
@@ -158,17 +173,17 @@ public class VideoDownloaderFrame extends JFrame {
             try {
                 Files.createDirectories(outputPath);
             } catch (IOException e) {
-                infoLabel.setText("Error creating directory: " + e.getMessage());
+                infoLabel.setText(ERROR_CREATING_DIRECTORY + e.getMessage());
                 return; // Terminate execution if the directory cannot be created
             }
         }
 
         String url = urlField.getText();
-        System.out.println("url: " + url);
+        System.out.println(URL + url);
         // Check for empty input
         if (url.isEmpty()) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
-                    "Please enter a URL.", "Error", JOptionPane.ERROR_MESSAGE));
+                    PLEASE_ENTER_A_URL, ERROR2, JOptionPane.ERROR_MESSAGE));
             return;
         }
 
@@ -176,7 +191,7 @@ public class VideoDownloaderFrame extends JFrame {
 
         if (!isValidURL(url)) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
-                    "Invalid URL. Please check and try again.", "Error", JOptionPane.ERROR_MESSAGE));
+                    INVALID_URL_PLEASE_CHECK_AND_TRY_AGAIN, ERROR3, JOptionPane.ERROR_MESSAGE));
             return;
         }
 
@@ -198,21 +213,21 @@ public class VideoDownloaderFrame extends JFrame {
                     output.append(line).append("\n");
                 }
                 process.waitFor();
-                if (output.toString().contains("ERROR")) {
-                    infoLabel.setText("Error: Check output");
+                if (output.toString().contains(ERROR1)) {
+                    infoLabel.setText(ERROR_CHECK_OUTPUT);
                     System.out.println(output);
                 } else {
-                    infoLabel.setText("Download complete");
+                    infoLabel.setText(DOWNLOAD_COMPLETE);
                 }
             }
         } catch (IOException ex) {
-            infoLabel.setText("I/O Error: " + ex.getMessage());
+            infoLabel.setText(I_O_ERROR + ex.getMessage());
             // Additional handling or logging of IOException
         } catch (InterruptedException ex) {
-            infoLabel.setText("Interrupted: " + ex.getMessage());
+            infoLabel.setText(INTERRUPTED + ex.getMessage());
             // Additional handling or logging of InterruptedException
         } catch (Exception ex) {
-            infoLabel.setText("General Error: " + ex.getMessage());
+            infoLabel.setText(GENERAL_ERROR + ex.getMessage());
             // Additional handling or logging of the general exception
         }
 
