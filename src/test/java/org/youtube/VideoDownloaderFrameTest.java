@@ -15,7 +15,7 @@ public class VideoDownloaderFrameTest {
 
     @Test
     public void testInvalidUrl() {
-        assertFalse(VideoDownloaderFrame.isValidURL("htt://www.google.com")); // отсутствует "p" в "http"
+        assertFalse(VideoDownloaderFrame.isValidURL("htt://www.google.com")); // missing "p" in "http"
         assertFalse(VideoDownloaderFrame.isValidURL("randomtext"));
     }
 
@@ -23,7 +23,6 @@ public class VideoDownloaderFrameTest {
     public void testDifferentProtocols() {
         assertFalse(VideoDownloaderFrame.isValidURL("ftp://www.example.com")); // FTP is not a supported protocol
     }
-
 
     @Test
     public void testDifferentProtocols_others() {
@@ -45,7 +44,7 @@ public class VideoDownloaderFrameTest {
     @Test
     public void testUrlWithPort() {
         assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com:8080/page"));
-        assertFalse(VideoDownloaderFrame.isValidURL("http://www.example.com:-1/page")); // недопустимый номер порта
+        assertFalse(VideoDownloaderFrame.isValidURL("http://www.example.com:-1/page")); // invalid port number
     }
 
     @Test
@@ -56,13 +55,12 @@ public class VideoDownloaderFrameTest {
     @Test
     public void testUrlWithPathCharacters() {
         assertTrue(VideoDownloaderFrame.isValidURL("https://www.example.com/valid_path"));
-        assertFalse(VideoDownloaderFrame.isValidURL("https://www.example.com/invalid|path")); // недопустимый символ в пути
+        assertFalse(VideoDownloaderFrame.isValidURL("https://www.example.com/invalid|path")); // invalid character in path
     }
 
     @Test
     public void testVeryLongUrl() {
         String longUrl = "https://www.example.com/" + "a".repeat(8000);
-        assertTrue(VideoDownloaderFrame.isValidURL(longUrl)); // Если вы ожидаете, что это допустимый URL
+        assertTrue(VideoDownloaderFrame.isValidURL(longUrl)); // If you expect this to be a valid URL
     }
-
 }
