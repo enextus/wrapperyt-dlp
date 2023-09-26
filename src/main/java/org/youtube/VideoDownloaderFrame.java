@@ -7,6 +7,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
@@ -57,7 +59,7 @@ public class VideoDownloaderFrame extends JFrame {
     /**
      * Constructor initializes the frame and components within it.
      */
-    public VideoDownloaderFrame() {
+/*    public VideoDownloaderFrame() {
         JButton downloadButton;
         JButton clearButton;
         setTitle(VIDEO_DOWNLOADER);
@@ -98,7 +100,66 @@ public class VideoDownloaderFrame extends JFrame {
                 urlField.requestFocusInWindow();
             }
         });
+
+    }*/
+
+    public VideoDownloaderFrame() {
+        JButton downloadButton;
+        JButton clearButton;
+        JButton openFolderButton; // Добавленная кнопка
+
+        setTitle(VIDEO_DOWNLOADER);
+        setSize(WIDTH1, HEIGHT1);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        urlField = new JTextField();
+
+        createAndSetPopupMenu();
+
+        downloadButton = new JButton(DOWNLOAD);
+        downloadButton.addActionListener(e -> downloadVideo());
+
+        clearButton = new JButton(CLEAR);
+        clearButton.addActionListener(e -> urlField.setText(""));
+
+        // Инициализируем и добавляем ActionListener к новой кнопке
+        openFolderButton = new JButton("Открыть папку");
+        openFolderButton.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().open(new File(OUTPUT_PATH));
+            } catch (IOException ioException) {
+                ioException.printStackTrace(); // Или отобразите диалоговое окно с ошибкой
+            }
+        });
+
+        infoLabel = new JLabel(ENTER_THE_VIDEO_URL);
+
+        JPanel eastPanel = new JPanel();
+        eastPanel.setLayout(new GridLayout(3, 1)); // Обновлено количество строк в GridLayout
+        eastPanel.add(downloadButton);
+        eastPanel.add(clearButton);
+        eastPanel.add(openFolderButton); // Добавляем новую кнопку на панель
+
+        panel.add(urlField, BorderLayout.CENTER);
+        panel.add(eastPanel, BorderLayout.EAST);
+        panel.add(infoLabel, BorderLayout.SOUTH);
+
+        add(panel);
+
+        // Set focus on the input field after display
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                urlField.requestFocusInWindow();
+            }
+        });
     }
+
+
 
     /**
      * Creates a popup menu specifically for the URL field.
