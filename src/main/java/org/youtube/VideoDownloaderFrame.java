@@ -59,50 +59,6 @@ public class VideoDownloaderFrame extends JFrame {
     /**
      * Constructor initializes the frame and components within it.
      */
-/*    public VideoDownloaderFrame() {
-        JButton downloadButton;
-        JButton clearButton;
-        setTitle(VIDEO_DOWNLOADER);
-        setSize(WIDTH1, HEIGHT1);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        urlField = new JTextField();
-
-        createAndSetPopupMenu();
-
-        downloadButton = new JButton(DOWNLOAD);
-        downloadButton.addActionListener(e -> downloadVideo());
-
-        clearButton = new JButton(CLEAR);
-        clearButton.addActionListener(e -> urlField.setText(""));
-
-        infoLabel = new JLabel(ENTER_THE_VIDEO_URL);
-
-        JPanel eastPanel = new JPanel();
-        eastPanel.setLayout(new GridLayout(2, 1));
-        eastPanel.add(downloadButton);
-        eastPanel.add(clearButton);
-
-        panel.add(urlField, BorderLayout.CENTER);
-        panel.add(eastPanel, BorderLayout.EAST);
-        panel.add(infoLabel, BorderLayout.SOUTH);
-
-        add(panel);
-
-        // Set focus on the input field after display
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                urlField.requestFocusInWindow();
-            }
-        });
-
-    }*/
-
     public VideoDownloaderFrame() {
         JButton downloadButton;
         JButton clearButton;
@@ -159,8 +115,6 @@ public class VideoDownloaderFrame extends JFrame {
         });
     }
 
-
-
     /**
      * Creates a popup menu specifically for the URL field.
      *
@@ -184,7 +138,6 @@ public class VideoDownloaderFrame extends JFrame {
         });
 
         popupMenu.add(pasteMenuItem);
-        // ... add more items if necessary
         return popupMenu;
     }
 
