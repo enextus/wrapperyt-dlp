@@ -25,6 +25,9 @@ import java.util.List;
  * VideoDownloaderFrame is a GUI class for downloading videos from YouTube.
  * It provides a simple interface for entering a video URL, and buttons to download the video
  * and clear the entered URL.
+ *
+ * VideoDownloaderFrame - это класс графического интерфейса пользователя для скачивания видео с YouTube.
+ * Он предоставляет простой интерфейс для ввода URL видео и кнопки для скачивания видео и очистки введенного URL.
  */
 public class VideoDownloaderFrame extends JFrame {
     private static final String OUTPUT_PATH = "C:/Users/Administrator/Desktop/downloadVideo/";
@@ -58,6 +61,7 @@ public class VideoDownloaderFrame extends JFrame {
 
     /**
      * Constructor initializes the frame and components within it.
+     * Конструктор инициализирует окно и компоненты внутри него.
      */
     public VideoDownloaderFrame() {
         JButton downloadButton;
@@ -77,6 +81,7 @@ public class VideoDownloaderFrame extends JFrame {
         createAndSetPopupMenu();
 
         downloadButton = new JButton(DOWNLOAD);
+        // Добавление обработчика событий для кнопки "Скачать"
         downloadButton.addActionListener(e -> downloadVideo());
 
         clearButton = new JButton(CLEAR);
@@ -84,7 +89,9 @@ public class VideoDownloaderFrame extends JFrame {
 
         // Инициализируем и добавляем ActionListener к новой кнопке
         openFolderButton = new JButton("Открыть папку");
+        // Инициализация и добавление обработчика событий для новой кнопки "Открыть папку"
         openFolderButton.addActionListener(e -> {
+            // Попытка открыть папку с использованием класса Desktop
             try {
                 Desktop.getDesktop().open(new File(OUTPUT_PATH));
             } catch (IOException ioException) {
@@ -184,15 +191,21 @@ public class VideoDownloaderFrame extends JFrame {
     /**
      * Downloads the video from the given URL.
      * Handles all the logic and error cases for downloading a video.
+     *
+     * Скачивает видео по заданному URL.
+     * Управляет всей логикой и обработкой ошибок при скачивании видео.
      */
     private void downloadVideo() {
+        // Проверка и создание каталога для скачивания видео
         Path outputPath = Paths.get(OUTPUT_PATH);
         if (!Files.exists(outputPath)) {
             try {
                 Files.createDirectories(outputPath);
             } catch (IOException e) {
                 infoLabel.setText(ERROR_CREATING_DIRECTORY + e.getMessage());
-                return; // Terminate execution if the directory cannot be created
+                // Прерывание выполнения, если каталог не может быть создан
+                // Terminate execution if the directory cannot be created
+                return;
             }
         }
 
@@ -200,6 +213,7 @@ public class VideoDownloaderFrame extends JFrame {
         System.out.println(URL + url);
 
         // Check for empty input
+        // Проверка на пустой ввод URL
         if (url.isEmpty()) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
                     PLEASE_ENTER_A_URL, ERROR2, JOptionPane.ERROR_MESSAGE));
@@ -208,21 +222,25 @@ public class VideoDownloaderFrame extends JFrame {
 
         System.out.println(URL1 + url);
 
+        // Проверка на валидность URL
         if (!isValidURL(url)) {
             SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(VideoDownloaderFrame.this,
                     INVALID_URL_PLEASE_CHECK_AND_TRY_AGAIN, ERROR3, JOptionPane.ERROR_MESSAGE));
             return;
         }
 
+        // Формирование команды для вызова внешней утилиты yt-dlp
         List<String> command = new ArrayList<>();
         command.add(YT_DLP);
         command.add(url);
         command.add(O);
         command.add(OUTPUT_PATH + TITLE_S_EXT_S);
 
+        // Запуск процесса скачивания видео
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
 
+        // Обработка потенциальных исключений во время скачивания
         try {
             Process process = processBuilder.start();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
